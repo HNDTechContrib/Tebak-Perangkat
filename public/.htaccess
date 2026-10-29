@@ -1,0 +1,9 @@
+# File yang ada (css, js, gambar) dikirim langsung. Selain itu diteruskan ke index.php (router).
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

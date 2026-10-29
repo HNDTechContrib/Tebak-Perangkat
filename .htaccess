@@ -1,0 +1,14 @@
+# Untuk hosting yang document root-nya folder proyek (bukan public/), mis. Laragon/XAMPP lokal:
+# semua alamat diteruskan ke folder public/. Akibatnya .env, app/, config/, database/ tidak bisa dibuka dari browser.
+# Kalau document root server sudah diarahkan ke public/, file ini tidak dipakai.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(?!public/)(.*)$ public/$1 [L]
+</IfModule>
+
+# Cadangan kalau mod_rewrite mati: tetap tolak file tersembunyi seperti .env
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
