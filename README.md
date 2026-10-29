@@ -1,9 +1,4 @@
-# Tebak Perangkat — PHP + MySQL dengan struktur folder ala Laravel
-
-Ini **bukan** Laravel. Ini PHP biasa tanpa Composer, tetapi folder dan cara kerjanya meniru Laravel,
-supaya mudah dipelajari dan nanti mudah pindah ke Laravel sungguhan.
-
-Butuh PHP 8.1+ (dengan PDO MySQL) dan MySQL 8 / MariaDB 10.5+, misalnya dari Laragon atau XAMPP.
+# Tebak Perangkat —
 
 ## Struktur folder
 
