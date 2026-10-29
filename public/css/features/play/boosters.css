@@ -1,0 +1,9 @@
+/* Tombol booster di bawah layar level. */
+
+.boost { display: flex; gap: 8px; }
+.bst { flex: 1; border: 0; background: var(--card); border-radius: 14px; box-shadow: 0 4px 0 var(--sky-deep); padding: 8px 6px; display: grid; justify-items: center; gap: 2px; }
+.bst b { font-size: .82rem; line-height: 1.15; }
+.bst small { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); font-size: .78rem; font-variant-numeric: tabular-nums; }
+.bst small .coin { width: 16px; height: 16px; font-size: .55rem; border-width: 1.5px; }
+.bst:disabled { opacity: .5; cursor: not-allowed; }
+.bst:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--sky-deep); }

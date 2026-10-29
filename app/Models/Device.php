@@ -14,7 +14,7 @@ class Device
     }
 
     // Jumlah level: 1 per perangkat + 1 level tambahan tiap 4 perangkat (dibatasi jumlah singkatan).
-    // Harus sama dengan buildPlan() di public/js/game/soal.js.
+    // Harus sama dengan buildPlan() di public/js/questions/levels.js.
     public static function levelCount(): int
     {
         static $n = null;

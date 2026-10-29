@@ -1,0 +1,17 @@
+/* Warna, font, dan aturan dasar halaman. */
+
+:root {
+  --sky: #19a7a0; --sky-deep: #0d7a75;
+  --card: #ffffff; --ink: #2b2233; --muted: #6e6577; --line: #d9e7e6; --slot: #eaf6f5;
+  --tile: #ffd23f; --tile-edge: #dba300;
+  --coral: #ff6b4a; --coral-edge: #d4452a;
+  --leaf: #3bbf6a; --leaf-edge: #24934e;
+  --lock: #b8c9c8;
+  --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { background-color: var(--sky); color: var(--ink); font-family: var(--f-body); font-size: 15px; font-weight: 700; transition: background-color .4s; }
+body{margin:0;overflow-x:clip}[hidden]{display:none!important}img{max-width:100%}

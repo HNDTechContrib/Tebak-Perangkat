@@ -1,0 +1,16 @@
+/* Pilihan jawaban (Pilihan ganda, Benar atau salah, Kategori, Singkatan). */
+
+.choices { display: grid; gap: 10px; }
+.choices.two { grid-template-columns: 1fr 1fr; }
+.opt { border: 0; border-radius: 16px; background: var(--card); box-shadow: 0 5px 0 var(--sky-deep); padding: 12px 14px; display: flex; align-items: center; gap: 12px;
+  text-align: left; font-size: 1.05rem; line-height: 1.25; min-height: 56px; }
+.opt .k { flex: none; width: 30px; height: 30px; border-radius: 9px; background: var(--slot); color: var(--sky-deep); display: grid; place-items: center; font-family: var(--f-display); }
+.opt span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.choices.two .opt { justify-content: center; font-family: var(--f-display); font-size: 1.4rem; min-height: 72px; }
+.opt:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 var(--sky-deep); }
+.opt.wrong { background: var(--coral); color: #fff; }
+.opt.wrong .k { background: rgba(255,255,255,.25); color: #fff; }
+.opt.right { background: var(--leaf); color: #fff; }
+.opt.right .k { background: rgba(255,255,255,.25); color: #fff; }
+.opt.cut { opacity: .3; }
+.opt:disabled { cursor: default; }

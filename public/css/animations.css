@@ -1,0 +1,27 @@
+/* Animasi masuk/keluar level dan semua keyframes. */
+
+/* masuk level: isi layar muncul bergantian dari bawah */
+#play.enter > * { animation: rise .4s cubic-bezier(.2, .9, .3, 1.15) both; }
+#play.enter > :nth-child(2) { animation-delay: .04s; } #play.enter > :nth-child(3) { animation-delay: .08s; }
+#play.enter > :nth-child(4) { animation-delay: .12s; } #play.enter > :nth-child(5) { animation-delay: .16s; }
+#play.enter > :nth-child(6) { animation-delay: .2s; }  #play.enter > :nth-child(7) { animation-delay: .2s; }
+#play.enter > :nth-child(8) { animation-delay: .24s; } #play.enter > :nth-child(9) { animation-delay: .24s; }
+#play.enter > :nth-child(10) { animation-delay: .28s; }
+/* keluar level: layar level turun & memudar, lalu halaman utama muncul bergantian */
+#play.leave { animation: leave .22s ease-in forwards; pointer-events: none; }
+#home.enter > * { animation: rise .4s cubic-bezier(.2, .9, .3, 1.15) both; }
+#home.enter > :nth-child(2) { animation-delay: .05s; } #home.enter > :nth-child(3) { animation-delay: .1s; }
+#home.enter > :nth-child(4) { animation-delay: .15s; } #home.enter > :nth-child(5) { animation-delay: .2s; }
+
+@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes leave { to { opacity: 0; transform: translateY(24px) scale(.98); } }
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes fadeOut { to { opacity: 0; } }
+@keyframes popOut { to { transform: scale(.88); opacity: 0; } }
+@keyframes drift { to { transform: translate(132px, 132px); } }
+@keyframes patIn { from { opacity: 0; } }
+@keyframes shake { 0%,100% { transform: none; } 20%,60% { transform: translateX(-7px); } 40%,80% { transform: translateX(7px); } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes starIn { from { transform: scale(0) rotate(-40deg); } 70% { transform: scale(1.2); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

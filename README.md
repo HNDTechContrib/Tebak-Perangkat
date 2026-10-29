@@ -25,17 +25,27 @@ app/
     DB.php              koneksi dan query database
     Auth.php            siapa yang sedang login
     HttpException.php   membatalkan request dengan pesan error
-    helpers.php         env(), config(), view(), asset(), e(), js()
+    helpers.php         env(), config(), view(), asset(), module_map(), e(), js()
 bootstrap/app.php     menyiapkan aplikasi: autoload class, zona waktu, sesi login
 config/               pengaturan: app.php, database.php, game.php (harga booster, koin, avatar)
 database/migrations/  perubahan struktur database, dijalankan berurutan sesuai nama
 public/               satu-satunya folder yang boleh dibuka dari browser
   index.php           pintu masuk semua request
-  css/game/           tampilan, dipecah per bagian (dasar, home, play, modal, ...)
-  js/game/            logika game, dipecah per bagian (core, soal, play, hasil, ...; main.js dimuat terakhir)
+  css/                tampilan: base/, ui/, features/ (play/ per bagian layar level), animations.css
+                      file CSS baru didaftarkan di resources/views/game/head.php (urutannya penting)
+  js/                 logika game (ES modules, tiap file maksimal 250 baris)
+    app.js              titik masuk: memasang semua fitur lalu memulai
+    core/               data dari server, state bersama, ikon, fungsi bantu DOM & acak
+    types/              tipe data untuk pemeriksaan tsc (tidak dimuat browser)
+    services/           api() ke server, layar koneksi terputus
+    ui/                 modal, toast, animasi, koin, effects/ (suara, confetti)
+    questions/          pembuatan soal: levels, picker, make-level, distractors/, pictures/
+    features/           satu folder per layar: auth, profile, home, leaderboard, themes, play (+ modes/)
   images/
-  (menambah file JS/CSS baru: daftarkan namanya di resources/views/game.php, urutannya penting)
-resources/views/      tampilan HTML (game.php, errors/database.php)
+resources/views/      tampilan HTML: game.php + bagian-bagiannya di game/ (head, auth, home, play, scripts),
+                      errors/database.php
+scripts/              check-lines.ts (pemeriksa batas 250 baris)
+package.json          perintah pemeriksaan kode (butuh Bun), lihat "Pemeriksaan kode" di bawah
 routes/web.php        daftar alamat dan controller-nya
 artisan               perintah terminal: php artisan migrate, dst.
 .env                  password dan pengaturan server (jangan dibagikan)
@@ -45,14 +55,14 @@ artisan               perintah terminal: php artisan migrate, dst.
 
 Contoh: pemain menekan **Ambil** di hadiah harian.
 
-1. `public/js/game/home.js` mengirim `POST api/daily`.
+1. `public/js/features/home/daily-reward.js` mengirim `POST api/daily`.
 2. `.htaccess` meneruskan semua alamat ke `public/index.php`.
 3. `public/index.php` memuat `bootstrap/app.php`, lalu daftar rute di `routes/web.php`.
 4. `App\Core\Router` mencari rute `POST /api/daily`, lalu memeriksa middleware `auth` (harus login).
 5. `PlayController::daily()` dijalankan. Controller ini memakai model `Player` dan `CoinTransaction`
    di dalam `DB::transaction()`, jadi kalau satu langkah gagal, semuanya dibatalkan.
 6. Controller mengembalikan array, lalu Router mengirimnya sebagai JSON.
-7. `home.js` menerima JSON-nya dan memperbarui jumlah koin di layar.
+7. `daily-reward.js` menerima JSON-nya dan memperbarui jumlah koin di layar.
 
 Halaman utama (`GET /`) berjalan sama, hanya saja `GameController::index()` mengembalikan
 `view('game', ...)`, yaitu HTML dari `resources/views/game.php`.
@@ -63,7 +73,7 @@ Halaman utama (`GET /`) berjalan sama, hanya saja `GameController::index()` meng
 2. Tambah fungsi `history()` di controller-nya.
 3. Taruh query SQL-nya di model, mis. `CoinTransaction::historyOf($id)`.
 4. Kalau butuh tabel atau kolom baru: `php artisan make:migration nama_perubahan`, isi, lalu `php artisan migrate`.
-5. Panggil dari file yang sesuai di `public/js/game/` dengan `api("riwayat")`.
+5. Panggil dari file fitur yang sesuai di `public/js/features/` dengan `api("riwayat")` (import dari `services/api.js`).
 
 ## Cara memasang
 
@@ -99,7 +109,7 @@ buat file baru dengan `make:migration` untuk setiap perubahan.
   urutan pilihan jawaban, huruf yang terbuka, dan benar/salahnya pernyataan.
 - Jenis permainan tidak pernah sama dengan percobaan sebelumnya di level yang sama, dan 25 perangkat
   terakhir yang keluar tidak langsung muncul lagi (diingat per browser).
-- Peluang tiap jenis permainan diatur di `WEIGHTS` pada `public/js/game/soal.js`. **Huruf acak** baru muncul setelah bagian Pemula.
+- Peluang tiap jenis permainan diatur di `WEIGHTS` pada `public/js/questions/levels.js`. **Huruf acak** baru muncul setelah bagian Pemula.
 - Mode **Tebak kata**: pemain menebak huruf satu per satu dengan 6 kesempatan salah.
 - Mode **Tebak gambar**: pemain melihat foto perangkat lalu mengetik namanya (3 kesempatan salah).
   78 perangkat punya foto asli dari Wikimedia Commons di `public/images/perangkat/` (sumber dan lisensi:
@@ -121,3 +131,16 @@ Tambahkan baris baru di tabel `devices` atau `abbreviations` (lewat phpMyAdmin a
 Soal baru langsung ikut diacak ke level dengan panjang kata yang sesuai.
 Menambah atau menonaktifkan perangkat mengubah **jumlah** level (1 level per perangkat), jadi sebaiknya
 dilakukan lewat migrasi agar tercatat.
+
+## Pemeriksaan kode
+
+Butuh [Bun](https://bun.sh). Sekali saja: `bun install`. Setelah mengubah kode JavaScript, jalankan:
+
+```
+bun tsc --noEmit        # pemeriksaan tipe (JavaScript + JSDoc), harus 0 error
+bun run check:lines     # semua file .js .ts .css .php maksimal 250 baris
+bun run check           # keduanya sekaligus
+```
+
+Tipe data game ada di `public/js/types/game.d.ts`. Fungsi baru diberi komentar JSDoc
+(`/** @param {number} i */`) supaya ikut diperiksa.

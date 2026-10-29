@@ -63,6 +63,21 @@ function asset(string $path): string
     return $path . (is_file($file) ? '?v=' . filemtime($file) : '');
 }
 
+// Import map untuk semua file JavaScript di public/$dir: setiap file mendapat ?v=waktu-ubah,
+// sehingga file yang dimuat lewat import juga selalu versi terbaru (bukan dari cache browser)
+function module_map(string $dir = 'js'): string
+{
+    $imports = [];
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path("public/$dir"), FilesystemIterator::SKIP_DOTS));
+    foreach ($files as $file) {
+        if ($file->getExtension() !== 'js') continue;
+        $path = $dir . '/' . str_replace('\\', '/', substr($file->getPathname(), strlen(base_path("public/$dir")) + 1));
+        $imports["./$path"] = "./$path?v=" . $file->getMTime();
+    }
+    ksort($imports);
+    return json_encode(['imports' => $imports], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_HEX_TAG);
+}
+
 // Amankan teks sebelum ditampilkan di HTML (sama dengan {{ }} di Blade)
 function e($value): string
 {

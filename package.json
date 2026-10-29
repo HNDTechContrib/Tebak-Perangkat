@@ -1,0 +1,13 @@
+{
+  "name": "tebak-perangkat",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "check:lines": "bun scripts/check-lines.ts",
+    "check": "tsc --noEmit && bun scripts/check-lines.ts"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

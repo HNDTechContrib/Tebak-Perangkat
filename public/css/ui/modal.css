@@ -1,0 +1,19 @@
+/* Modal: hasil level, profil, tema, peringkat, konfirmasi. */
+
+.scrim { position: fixed; inset: 0; background: rgba(20,30,35,.55); display: grid; place-items: center; padding: 16px; z-index: 10; animation: fadeIn .2s ease-out; }
+.scrim.out { animation: fadeOut .2s ease-in forwards; pointer-events: none; }
+.scrim.out .modal { animation: popOut .2s ease-in forwards; }
+.modal { background: var(--card); border-radius: 24px; padding: 22px 20px 20px; width: min(360px, 100%); text-align: center; display: grid; gap: 12px; animation: pop .25s ease-out;
+  max-height: calc(100dvh - 32px); overflow-y: auto; }
+.modal h3 { font-family: var(--f-display); font-size: 1.8rem; margin: 0; line-height: 1; }
+.modal p { margin: 0; color: var(--muted); }
+.modal .ans { font-family: var(--f-display); font-size: 1.3rem; color: var(--ink); line-height: 1.2; }
+.stars { display: flex; justify-content: center; gap: 6px; }
+.stars svg { width: 54px; height: 54px; }
+.stars svg:nth-child(2) { transform: translateY(-10px); }
+.stars .on { animation: starIn .4s ease-out both; }
+.stars .on:nth-child(2) { animation-delay: .2s; } .stars .on:nth-child(3) { animation-delay: .4s; }
+.reward { display: inline-flex; gap: 8px; align-items: center; justify-self: center; background: var(--slot); border-radius: 99px; padding: 6px 14px 6px 6px; font-family: var(--f-display); font-size: 1.2rem; }
+.mbtns { display: grid; gap: 12px; margin-top: 4px; }
+.mlogo { justify-self: center; width: 84px; height: auto; opacity: .9; }
+.modal.wide { width: min(420px, 100%); }

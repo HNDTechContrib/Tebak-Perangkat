@@ -1,0 +1,7 @@
+/* Latar tema: pola ikon bergerak pelan di lapisan sendiri. */
+
+/* pola ikon tema di lapisan sendiri supaya bisa bergerak pelan tanpa menggambar ulang seluruh halaman */
+body::before { content: ""; position: fixed; inset: -132px 0 0 -132px; z-index: -1; pointer-events: none;
+  background-image: var(--pat, radial-gradient(rgba(255,255,255,.14) 2px, transparent 2.5px)); background-size: 132px 132px;
+  animation: drift 30s linear infinite; will-change: transform; }
+body.swap::before { animation: drift 30s linear infinite, patIn .6s ease-out; }   /* ganti tema: pola baru memudar masuk */

@@ -30,7 +30,7 @@ class Player
         });
     }
 
-    // Data pemain dalam bentuk yang dipakai JavaScript (objek P di public/js/game/pemain.js)
+    // Data pemain dalam bentuk yang dipakai JavaScript (state.player di public/js/core/state.js, tipe Player di public/js/types/game.d.ts)
     public static function state(int $id): ?array
     {
         $p = self::find($id);

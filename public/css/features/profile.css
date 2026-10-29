@@ -1,0 +1,26 @@
+/* Avatar dan modal profil. */
+
+.av { flex: none; width: 32px; height: 32px; border-radius: 50%; border: 2px solid #fff; display: grid; place-items: center; color: #fff; }
+.av svg { width: 60%; height: 60%; }
+.av.xl { width: 68px; height: 68px; border-width: 3px; box-shadow: 0 4px 0 rgba(0,0,0,.12); }
+.profbtn { padding: 0; overflow: hidden; }
+.profbtn .av { width: 40px; height: 40px; border-radius: 12px; border: 0; }
+.phead { display: flex; align-items: center; gap: 14px; text-align: left; }
+.phead > div { min-width: 0; display: grid; gap: 2px; }
+.phead h3 { font-size: 1.5rem; overflow-wrap: anywhere; }
+.phead p { font-size: .85rem; }
+.phead .bio { color: var(--ink); font-size: .92rem; }
+.pstats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pstats div { background: var(--slot); border-radius: 12px; padding: 8px 4px; display: grid; }
+.pstats b { font-family: var(--f-display); font-size: 1.2rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.pstats small { color: var(--muted); font-size: .72rem; }
+.modal .aform { text-align: left; }
+.plbl { font-size: .9rem; }
+.picks { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.picks.colors { grid-template-columns: repeat(8, 1fr); }
+.pick { aspect-ratio: 1; border: 0; border-radius: 12px; background: var(--slot); color: var(--sky-deep); display: grid; place-items: center; padding: 0; }
+.pick svg { width: 60%; height: 60%; }
+.pick.on { background: #fff; box-shadow: 0 0 0 3px var(--leaf); }
+.pick.dot { border-radius: 50%; }
+.pick.dot.on { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--ink); }
+.linkbtn { border: 0; background: none; color: var(--coral-edge); text-decoration: underline; padding: 4px; font-size: .9rem; justify-self: center; }

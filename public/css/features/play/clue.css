@@ -1,0 +1,16 @@
+/* Layar level: bar waktu, kartu soal, tombol petunjuk. */
+
+.timer { height: 14px; background: rgba(0,0,0,.2); border-radius: 99px; overflow: hidden; }
+.timer i { display: block; height: 100%; width: 100%; background: var(--tile); border-radius: 99px; transition: width .2s linear, background .3s; }
+.timer i.low { background: var(--coral); }
+.clue { display: grid; gap: 10px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; background: var(--slot); color: var(--sky-deep); border-radius: 99px;
+  padding: 4px 12px 4px 6px; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+.badge svg { width: 22px; height: 22px; }
+.mode { display: inline-flex; align-items: center; background: var(--tile); color: var(--ink); border-radius: 99px; padding: 4px 12px; font-size: .78rem; }
+.clue p { margin: 0; font-size: 1.15rem; line-height: 1.35; font-weight: 800; }
+.clue .stmt { font-family: var(--f-display); font-size: 1.35rem; background: var(--slot); border-radius: 12px; padding: 8px 12px; }
+.peek { justify-self: start; display: inline-flex; align-items: center; gap: 6px; border: 2px dashed var(--line); background: var(--slot); color: var(--sky-deep);
+  border-radius: 12px; padding: 7px 12px; font-size: .92rem; }
+.peek small { color: var(--muted); }

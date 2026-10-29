@@ -1,0 +1,28 @@
+/* Kotak huruf: jawaban, huruf untuk disusun, keyboard Tebak kata, sisa kesempatan. */
+
+.slots { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 18px; }
+.grp { display: flex; gap: 5px; }
+.slot { width: min(40px, calc((min(100vw, 460px) - 32px) / var(--n, 8) - 6px)); aspect-ratio: 1 / 1.15; border-radius: 10px; border: 2px dashed rgba(255,255,255,.7);
+  background: rgba(255,255,255,.15); font-family: var(--f-display); font-size: clamp(1rem, 5vw, 1.45rem); display: grid; place-items: center; padding: 0; color: var(--ink); }
+.slot.f { border: 0; background: var(--tile); box-shadow: 0 3px 0 var(--tile-edge); animation: pop .18s ease-out; }
+.slot.lk { border: 0; background: var(--leaf); color: #fff; box-shadow: 0 3px 0 var(--leaf-edge); cursor: default; animation: none; }
+.slots.bad .slot.f { background: var(--coral); color: #fff; box-shadow: 0 3px 0 var(--coral-edge); }
+.slots.win .slot { background: var(--leaf); color: #fff; box-shadow: 0 3px 0 var(--leaf-edge); border: 0; }
+.shake { animation: shake .35s; }
+.pool { display: grid; grid-template-columns: repeat(8, 1fr); gap: 7px; }
+.tile { aspect-ratio: 1 / 1.1; border: 0; border-radius: 12px; background: var(--card); box-shadow: 0 4px 0 var(--line);
+  font-family: var(--f-display); font-size: clamp(1.05rem, 4.8vw, 1.4rem); padding: 0; display: grid; place-items: center; }
+.tile:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.tile.used { visibility: hidden; }
+.tile.gone { opacity: 0; transform: scale(.4); transition: opacity .25s, transform .25s; pointer-events: none; }
+.lives { display: flex; justify-content: center; align-items: center; gap: 6px; color: #fff; font-size: .9rem; }
+.lives i { width: 14px; height: 14px; border-radius: 50%; background: var(--coral); box-shadow: 0 2px 0 var(--coral-edge); }
+.lives i.off { background: rgba(255,255,255,.25); box-shadow: none; }
+.keys { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.key { aspect-ratio: 1 / 1.05; border: 0; border-radius: 10px; background: var(--card); box-shadow: 0 4px 0 var(--line); font-family: var(--f-display); font-size: clamp(1rem, 4.6vw, 1.3rem); padding: 0; }
+.key:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.key.hit { background: var(--leaf); color: #fff; box-shadow: 0 4px 0 var(--leaf-edge); }
+.key.miss { background: rgba(255,255,255,.3); color: rgba(43,34,51,.45); box-shadow: none; }
+.key:disabled { cursor: default; }
+.slot.t { border: 0; background: var(--tile); box-shadow: 0 3px 0 var(--tile-edge); }
+@media (max-width: 360px) { .grid { grid-template-columns: repeat(4, 1fr); } .pool { gap: 5px; } }
