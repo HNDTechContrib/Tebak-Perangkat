@@ -1,0 +1,9 @@
+/* Tata letak layar level: setinggi layar. Bar di atas, waktu + soal + kotak jawaban di tengah,
+   tombol untuk menjawab di bawah supaya mudah dijangkau jempol. */
+
+#play { display: flex; flex-direction: column; min-height: calc(100dvh - 46px); }   /* 46px = padding atas + bawah .app */
+.stage { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.controls { margin-top: auto; display: grid; gap: 14px; }
+
+/* layar pendek: gambar soal dikecilkan supaya tombol jawaban tetap terlihat tanpa menggulir */
+@media (max-height: 700px) { .pic svg, .pic img { max-height: 130px; } }

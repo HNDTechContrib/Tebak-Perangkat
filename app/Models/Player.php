@@ -11,23 +11,28 @@ class Player
         return DB::first("SELECT * FROM players WHERE id = ?", [$id]);
     }
 
-    public static function findByUsername(string $username): ?array
+    // ID pemain milik user website utama ini. Saat pertama kali masuk, pemainnya dibuat
+    // lengkap dengan tema awal dan catatan koin awal.
+    public static function findOrCreateExternal(string $externalId, ?string $nickname): int
     {
-        return DB::first("SELECT * FROM players WHERE username = ?", [$username]);
-    }
-
-    // Buat akun baru, lengkap dengan tema awal dan catatan koin awal. Mengembalikan ID-nya.
-    public static function create(string $username, string $password, ?string $nickname): int
-    {
-        return DB::transaction(function () use ($username, $password, $nickname) {
-            $coins = config('game.start_coins');
-            DB::statement("INSERT INTO players (username, password_hash, nickname, coins) VALUES (?, ?, ?, ?)",
-                [$username, password_hash($password, PASSWORD_DEFAULT), $nickname, $coins]);
-            $id = DB::lastInsertId();
-            DB::statement("INSERT INTO player_themes (player_id, theme_id) VALUES (?, 'hnd')", [$id]);
-            CoinTransaction::log($id, $coins, 'awal');
-            return $id;
-        });
+        $id = DB::value("SELECT id FROM players WHERE external_id = ?", [$externalId]);
+        if ($id) return (int) $id;
+        try {
+            return DB::transaction(function () use ($externalId, $nickname) {
+                $coins = config('game.start_coins');
+                // username wajib unik; pemain dari website utama tidak memakainya untuk login
+                DB::statement("INSERT INTO players (external_id, username, nickname, coins) VALUES (?, ?, ?, ?)",
+                    [$externalId, 'u_' . substr(sha1($externalId), 0, 20), $nickname, $coins]);
+                $id = DB::lastInsertId();
+                DB::statement("INSERT INTO player_themes (player_id, theme_id) VALUES (?, 'hnd')", [$id]);
+                CoinTransaction::log($id, $coins, 'awal');
+                return $id;
+            });
+        } catch (\PDOException $e) {
+            // dibuat bersamaan oleh permintaan lain (mis. dua tab): pakai yang sudah ada
+            if (($e->errorInfo[1] ?? 0) !== 1062) throw $e;
+            return (int) DB::value("SELECT id FROM players WHERE external_id = ?", [$externalId]);
+        }
     }
 
     // Data pemain dalam bentuk yang dipakai JavaScript (state.player di public/js/core/state.js, tipe Player di public/js/types/game.d.ts)

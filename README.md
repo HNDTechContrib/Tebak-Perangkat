@@ -7,10 +7,10 @@ app/
   Controllers/        menerima request, memeriksa input, memanggil model, mengembalikan hasil
     Controller.php      induk semua controller (input(), fail(), userId())
     GameController.php  halaman game
-    AuthController.php  daftar, masuk, keluar
+    EnterController.php masuk ke minigame dari website utama (layar loading)
     PlayController.php  mulai level, booster, menang, hadiah harian
     ThemeController.php beli dan pakai tema
-    ProfileController.php  profil, kata sandi, pengaturan
+    ProfileController.php  profil dan pengaturan
     LeaderboardController.php  papan peringkat
   Models/             semua query database, satu file per tabel
     Player.php, LevelProgress.php, Theme.php, Device.php, Abbreviation.php,
@@ -18,7 +18,8 @@ app/
   Core/               "mesin" kecil aplikasi (di Laravel bagian ini ada di folder vendor/)
     Router.php          mencocokkan URL dengan controller
     DB.php              koneksi dan query database
-    Auth.php            siapa yang sedang login
+    Auth.php            pemain yang sedang bermain (sesi minigame)
+    MainSite.php        titik sambungan ke website utama: siapa user yang login di sana
     HttpException.php   membatalkan request dengan pesan error
     helpers.php         env(), config(), view(), asset(), module_map(), e(), js()
 bootstrap/app.php     menyiapkan aplikasi: autoload class, zona waktu, sesi login
@@ -35,9 +36,9 @@ public/               satu-satunya folder yang boleh dibuka dari browser
     services/           api() ke server, layar koneksi terputus
     ui/                 modal, toast, animasi, koin, effects/ (suara, confetti)
     questions/          pembuatan soal: levels, picker, make-level, distractors/, pictures/
-    features/           satu folder per layar: auth, profile, home, leaderboard, themes, play (+ modes/)
+    features/           satu folder per layar: enter (layar loading), profile, home, leaderboard, themes, play (+ modes/)
   images/
-resources/views/      tampilan HTML: game.php + bagian-bagiannya di game/ (head, auth, home, play, scripts),
+resources/views/      tampilan HTML: game.php + bagian-bagiannya di game/ (head, enter, home, play, scripts),
                       errors/database.php
 scripts/              check-lines.ts (pemeriksa batas 250 baris)
 package.json          perintah pemeriksaan kode (butuh Bun), lihat "Pemeriksaan kode" di bawah
@@ -79,7 +80,8 @@ Halaman utama (`GET /`) berjalan sama, hanya saja `GameController::index()` meng
    php artisan migrate
    ```
    Perintah ini membuat database, semua tabel, tema, soal, singkatan, dan data foto.
-4. Buka `http://localhost/<nama-folder>/`, daftar akun, lalu main.
+4. Buka `http://localhost/<nama-folder>/`. Dengan `MAIN_SITE_MODE=dev` di `.env`, minigame langsung
+   terbuka sebagai pemain uji (lihat "Sambungan ke website utama").
 
 Di server production, arahkan **document root** ke folder `public/`. Kalau hosting tidak mengizinkan,
 `.htaccess` di folder utama akan meneruskan semua alamat ke `public/` (butuh Apache dengan mod_rewrite).
@@ -93,9 +95,27 @@ Di server production, arahkan **document root** ke folder `public/`. Kalau hosti
 | `php artisan migrate:rollback` | batalkan kelompok migrasi terakhir |
 | `php artisan make:migration tambah_kolom_avatar` | buat file migrasi baru dari template |
 | `php artisan migrate:fresh --force` | hapus semua tabel lalu migrasi ulang (**semua data hilang**) |
+| `php artisan import:excel <file.xlsx>` | impor bank soal dari Excel/CSV (mode tambah/perbarui) |
+| `php artisan import:excel <file.xlsx> --replace` | impor dan ganti seluruh isi bank soal |
+| `php artisan export:template [file.xlsx]` | buat file template Excel siap isi |
+| `php artisan export:soal [file.xlsx]` | ekspor seluruh bank soal database ke Excel |
 
 Riwayat migrasi disimpan di tabel `migrations`. Jangan ubah file migrasi yang sudah dijalankan di server;
 buat file baru dengan `make:migration` untuk setiap perubahan.
+
+## Impor & Ekspor Soal Excel
+
+Tersedia dua cara untuk mengimpor dan mengekspor soal:
+
+1. **Lewat Web Browser**:
+   - Buka alamat `/import` (mis. `http://localhost:8000/import` atau klik ikon dokumen di bar atas game).
+   - Unduh template Excel (`.xlsx`), isi data soal, lalu unggah kembali melalui dropzone.
+   - Pilihan mode: **Tambah & Perbarui (Upsert)** atau **Ganti Semua (Replace)**.
+
+2. **Lewat Terminal (Artisan)**:
+   - Buat template: `php artisan export:template template.xlsx`
+   - Impor data: `php artisan import:excel template.xlsx`
+   - Ekspor data saat ini: `php artisan export:soal soal_sekarang.xlsx`
 
 ## Cara kerja level
 
@@ -113,12 +133,22 @@ buat file baru dengan `make:migration` untuk setiap perubahan.
   Untuk mengganti foto, ubah kolom `image`, `image_credit`, dan `image_source` di tabel `devices` lewat migrasi baru.
 - Pilihan jawaban dibuat mirip jawaban asli: kepanjangan singkatan diganti satu-dua katanya
   (mis. *Central Process Unit*), singkatan ditukar hurufnya (*CUP*), dan pilihan ganda berisi satu nama yang salah eja.
-- Mode **Huruf acak**: petunjuknya tersembunyi. Pemain bisa membukanya kapan saja dengan konsekuensi −1 bintang.
+- Mode **Huruf acak**: semua huruf jawaban diacak tanpa huruf pengecoh, petunjuk langsung tampil.
 
 ## Profil pemain
 
 Tombol avatar di kanan atas membuka profil: statistik (bintang, level, peringkat, level sempurna),
-ubah nama tampilan, bio, ikon dan warna avatar, ganti kata sandi, dan keluar dari akun.
+ubah nama tampilan, bio, ikon dan warna avatar. Login, kata sandi, dan keluar akun diatur di website utama.
+
+## Sambungan ke website utama
+
+Minigame ini tidak punya halaman login sendiri. Saat dibuka, layar loading memanggil `POST api/enter`;
+server menanyakan `App\Core\MainSite::user()` siapa user website utama yang sedang login, lalu membuat
+(atau memakai) data pemainnya di tabel `players` (kolom `external_id` = ID user di website utama).
+
+- `MAIN_SITE_MODE=dev` (hanya kalau `APP_ENV=development`): semua dianggap user uji `DEV_USER_ID`.
+- `MAIN_SITE_MODE=off`: layar loading berhenti dengan pesan "Masuk lewat website utama untuk bermain."
+- Sambungan asli (token dari website utama atau sesi login bersama) cukup ditulis di `app/Core/MainSite.php`.
 
 ## Menambah soal
 

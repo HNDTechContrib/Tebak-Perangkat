@@ -3,8 +3,9 @@
 // Format: $router->get|post('/alamat', [NamaController::class, 'fungsi'], ['middleware']);
 // Middleware 'auth' = harus login dulu.
 
-use App\Controllers\AuthController;
+use App\Controllers\EnterController;
 use App\Controllers\GameController;
+use App\Controllers\ImportController;
 use App\Controllers\LeaderboardController;
 use App\Controllers\PlayController;
 use App\Controllers\ProfileController;
@@ -15,10 +16,17 @@ use App\Controllers\ThemeController;
 // Halaman game
 $router->get('/', [GameController::class, 'index']);
 
-// Akun
-$router->post('/api/register', [AuthController::class, 'register']);
-$router->post('/api/login',    [AuthController::class, 'login']);
-$router->post('/api/logout',   [AuthController::class, 'logout']);
+// Kelola & Impor Soal Excel
+$router->get('/import',                 [ImportController::class, 'index']);
+$router->get('/import/template',        [ImportController::class, 'template']);
+$router->get('/import/import/template', [ImportController::class, 'template']);
+$router->get('/import/export',          [ImportController::class, 'export']);
+$router->get('/import/import/export',   [ImportController::class, 'export']);
+$router->post('/api/import',            [ImportController::class, 'upload']);
+$router->post('/import/api/import',     [ImportController::class, 'upload']);
+
+// Masuk dari website utama (login ada di website utama, lihat app/Core/MainSite.php)
+$router->post('/api/enter', [EnterController::class, 'enter']);
 
 // Papan peringkat (boleh tanpa login)
 $router->get('/api/leaderboard', [LeaderboardController::class, 'index']);
@@ -36,5 +44,4 @@ $router->post('/api/theme', [ThemeController::class, 'choose'], ['auth']);
 $router->get('/api/state',     [ProfileController::class, 'state'],    ['auth']);
 $router->get('/api/profile',   [ProfileController::class, 'show'],     ['auth']);
 $router->post('/api/profile',  [ProfileController::class, 'update'],   ['auth']);
-$router->post('/api/password', [ProfileController::class, 'password'], ['auth']);
 $router->post('/api/settings', [ProfileController::class, 'settings'], ['auth']);

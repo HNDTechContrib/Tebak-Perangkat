@@ -1,15 +1,14 @@
 // Titik masuk game di browser. Satu-satunya script di halaman (<script type="module">);
 // file lain dimuat lewat import. Data dari server ada di window.GAME (resources/views/game/scripts.php).
 import { LOGO } from "./core/data.js";
-import { state } from "./core/state.js";
 import { initOffline } from "./services/offline.js";
 import { initSound } from "./ui/effects/sound.js";
-import { initAuth, showAuth } from "./features/auth/auth-form.js";
+import { enterGame, initEnter } from "./features/enter/enter-screen.js";
 import { initProfile } from "./features/profile/profile-modal.js";
-import { initHome, showHome } from "./features/home/home.js";
+import { initHome } from "./features/home/home.js";
 import { initMap } from "./features/home/level-map.js";
 import { initDaily } from "./features/home/daily-reward.js";
-import { initLeaderboard, loadBoard } from "./features/leaderboard/leaderboard.js";
+import { initLeaderboard } from "./features/leaderboard/leaderboard.js";
 import { applyTheme } from "./features/themes/apply-theme.js";
 import { initThemes } from "./features/themes/theme-shop.js";
 import { initPlay } from "./features/play/play.js";
@@ -21,7 +20,7 @@ import { initType } from "./features/play/modes/type.js";
 import { initChoices } from "./features/play/modes/choices.js";
 
 // pasang semua tombol dan event
-initAuth(); initProfile(); initHome(); initMap(); initDaily(); initLeaderboard(); initThemes();
+initEnter(); initProfile(); initHome(); initMap(); initDaily(); initLeaderboard(); initThemes();
 initPlay(); initBoosters(); initKeyboard(); initTiles(); initGuess(); initType(); initChoices();
 initSound(); applyTheme(); initOffline();
 
@@ -31,4 +30,5 @@ document.addEventListener("contextmenu", e => {                          // teka
 });
 document.querySelectorAll("img.logo").forEach(img => { if (img instanceof HTMLImageElement) img.src = LOGO; });
 
-if (state.player) { showHome(); loadBoard(); } else showAuth();
+// login ada di website utama: layar loading mengenali pemainnya lalu membuka halaman utama
+enterGame();

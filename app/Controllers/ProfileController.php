@@ -1,11 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Auth;
 use App\Models\Leaderboard;
 use App\Models\Player;
 
-// Profil pemain: statistik, ubah profil, ganti kata sandi, pengaturan suara.
+// Profil pemain: statistik, ubah profil, pengaturan suara. (Kata sandi diatur di website utama.)
 class ProfileController extends Controller
 {
     // GET /api/state — data pemain terbaru
@@ -41,23 +40,6 @@ class ProfileController extends Controller
             'avatar_color' => $color,
         ]);
         return ['state' => Player::state($this->userId())];
-    }
-
-    // POST /api/password
-    public function password(): array
-    {
-        $current = (string) $this->input('current', '');
-        $new     = (string) $this->input('new', '');
-        $player  = Player::find($this->userId());
-
-        if (!password_verify($current, $player['password_hash'])) $this->fail('Kata sandi sekarang salah.');
-        if (strlen($new) < 6) $this->fail('Kata sandi baru minimal 6 karakter.');
-        if (strlen($new) > 72) $this->fail('Kata sandi baru maksimal 72 karakter.');
-        if ($new === $current) $this->fail('Kata sandi baru harus berbeda dari yang sekarang.');
-
-        Player::update($this->userId(), ['password_hash' => password_hash($new, PASSWORD_DEFAULT)]);
-        Auth::login($this->userId());   // ganti ID sesi setelah kata sandi berubah
-        return ['ok' => true];
     }
 
     // POST /api/settings — nama tampilan dan suara

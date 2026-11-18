@@ -8,10 +8,10 @@
 // Urutan file CSS penting: aturan di file belakang menimpa file depan
 $styles = [
     'base/tokens', 'base/background', 'base/layout', 'base/buttons',
-    'features/home',
-    'features/play/clue', 'features/play/letters', 'features/play/choices', 'features/play/boosters', 'features/play/picture',
+    'features/home', 'features/enter',
+    'features/play/layout', 'features/play/clue', 'features/play/letters', 'features/play/choices', 'features/play/boosters', 'features/play/picture',
     'ui/modal', 'ui/toast', 'ui/offline', 'ui/confetti',
-    'features/leaderboard', 'features/themes', 'features/profile', 'features/auth',
+    'features/leaderboard', 'features/themes', 'features/profile',
     'animations',
 ];
 foreach ($styles as $f): ?>

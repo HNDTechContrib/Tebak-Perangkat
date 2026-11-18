@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="app">
-<?php require __DIR__ . '/game/auth.php'; ?>
+<?php require __DIR__ . '/game/enter.php'; ?>
 
 <?php require __DIR__ . '/game/home.php'; ?>
 

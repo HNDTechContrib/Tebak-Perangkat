@@ -26,15 +26,18 @@ export function showHome() {
   drawHome(false);
 }
 
+/** Dari layar loading: tampilkan halaman utama dengan animasi masuk */
+export function enterHome() { drawHome(true); }
+
 /** Dipanggil saat level dimulai, supaya animasi keluar yang belum selesai dibatalkan */
 export function cancelLeave() {
   clearTimeout(leaveTimer); $("play").classList.remove("leave");
 }
 
-/** @param {boolean} fromLevel */
-function drawHome(fromLevel) {
+/** @param {boolean} animateIn  muncul bergantian dari bawah (setelah keluar level atau layar loading) */
+function drawHome(animateIn) {
   $("play").hidden = true; $("home").hidden = false;
-  if (fromLevel) animate($("home"), "enter");
+  if (animateIn) animate($("home"), "enter");
   setCoins(); showHello(); drawProfileBtn(); drawDaily(); drawMap();
   window.scrollTo({ top: 0 });
 }

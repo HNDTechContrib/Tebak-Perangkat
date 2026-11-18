@@ -1,0 +1,10 @@
+/* Layar loading masuk ke minigame.
+   Jangan pakai class .enter di sini: nama itu dipakai animasi masuk #home dan #play (animations.css). */
+
+.loading-screen { min-height: calc(100dvh - 46px); display: grid; align-content: center; justify-items: center; gap: 22px; text-align: center; }
+.loadbar { width: min(260px, 80%); height: 14px; border-radius: 99px; background: rgba(0,0,0,.2); overflow: hidden; }
+.loadbar i { display: block; height: 100%; width: 35%; border-radius: 99px; background: var(--tile); animation: loadSlide 1.1s ease-in-out infinite; }
+.loadbar.done i { width: 100%; animation: none; transform: none; transition: width .3s ease-out; }
+.loadbar.fail i { width: 100%; animation: none; transform: none; background: var(--coral); }
+.enter-msg { margin: 0; color: #fff; font-size: 1rem; min-height: 1.4em; max-width: 30ch; }
+@keyframes loadSlide { from { transform: translateX(-110%); } to { transform: translateX(310%); } }

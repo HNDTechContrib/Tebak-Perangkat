@@ -5,7 +5,7 @@ button { font: inherit; cursor: pointer; color: inherit; -webkit-tap-highlight-c
   transition: transform .18s cubic-bezier(.3, 1.6, .5, 1), box-shadow .12s ease-out, background-color .15s, opacity .2s; }
 /* animasi tekan: turun cepat saat ditekan, memantul kembali saat dilepas */
 button:active:not(:disabled) { transition-duration: .05s; }
-.iconbtn:active:not(:disabled), .link:active, .linkbtn:active, .peek:active:not(:disabled), .tabs button:active,
+.iconbtn:active:not(:disabled), .link:active, .linkbtn:active, .peek:active:not(:disabled),
 .pick:active, .th:active, .slot:active:not(:disabled):not(.lk) { transform: scale(.9); }
 .lv:active:not(:disabled) { animation: none; transform: scale(.9); }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }

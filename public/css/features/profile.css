@@ -24,3 +24,10 @@
 .pick.dot { border-radius: 50%; }
 .pick.dot.on { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--ink); }
 .linkbtn { border: 0; background: none; color: var(--coral-edge); text-decoration: underline; padding: 4px; font-size: .9rem; justify-self: center; }
+
+.aform { display: grid; gap: 12px; }
+.aform label { display: grid; gap: 4px; font-size: .9rem; }
+.aform label small { color: var(--muted); font-weight: 600; }
+.aform input { font: inherit; border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; color: var(--ink); background: #fff; }
+.aform input:focus { outline: none; border-color: var(--sky); }
+.aerr { margin: 0; color: var(--coral-edge); font-size: .88rem; min-height: 1.2em; }

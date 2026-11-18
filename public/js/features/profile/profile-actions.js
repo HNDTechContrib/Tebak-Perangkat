@@ -1,4 +1,4 @@
-// Aksi di modal profil: simpan profil, ganti kata sandi, dan muat statistik.
+// Aksi di modal profil: simpan profil dan muat statistik.
 import { $, $input, esc } from "../../core/dom.js";
 import { player } from "../../core/state.js";
 import { api, applyState } from "../../services/api.js";
@@ -23,21 +23,6 @@ export async function saveProfile(btn, sel) {
     applyState((await api("profile", { nickname: $input("pNick").value, bio: $input("pBio").value, avatar_icon: sel.icon, avatar_color: sel.color })).state);
     drawHead(); showHello(); drawProfileBtn(); loadBoard(); toast("Profil disimpan.");
   } catch (e) { $("pErr").textContent = message(e); }
-  btn.disabled = false;
-}
-
-/** @param {HTMLButtonElement} btn */
-export async function changePassword(btn) {
-  const cur = $input("pCur").value, nw = $input("pNew").value;
-  $("pPassErr").textContent = nw.length < 6 ? "Kata sandi baru minimal 6 karakter."
-    : nw !== $input("pNew2").value ? "Ulangan kata sandi baru tidak sama." : "";
-  if ($("pPassErr").textContent) return;
-  btn.disabled = true;
-  try {
-    await api("password", { current: cur, new: nw });
-    ["pCur", "pNew", "pNew2"].forEach(id => { $input(id).value = ""; });
-    toast("Kata sandi berhasil diganti.");
-  } catch (e) { $("pPassErr").textContent = message(e); }
   btn.disabled = false;
 }
 

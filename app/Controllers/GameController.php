@@ -1,10 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Auth;
 use App\Models\Abbreviation;
 use App\Models\Device;
-use App\Models\Player;
 use App\Models\Theme;
 use Throwable;
 
@@ -19,7 +17,7 @@ class GameController extends Controller
                 'bank'   => Device::allForGame(),
                 'abbr'   => Abbreviation::allForGame(),
                 'themes' => Theme::all(),
-                'player' => Auth::check() ? Player::state(Auth::id()) : null,
+                'player' => null,   // diisi setelah layar loading memanggil api/enter
                 'cfg'    => [
                     'daily_coins'   => config('game.daily_coins'),
                     'boosters'      => config('game.boosters'),
@@ -33,8 +31,6 @@ class GameController extends Controller
             http_response_code(503);
             return view('errors.database');
         }
-        if (Auth::check() && !$data['player']) $_SESSION = [];   // akunnya sudah dihapus
-
         return view('game', ['game' => $data]);
     }
 }

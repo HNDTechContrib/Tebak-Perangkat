@@ -38,7 +38,8 @@ export function sfx(kind) {
 const SND_ON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
 const SND_OFF = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
 
-function drawSnd() {
+/** Ikon tombol suara sesuai pengaturan pemain */
+export function drawSnd() {
   const muted = !!state.player?.mute;
   document.querySelectorAll(".snd").forEach(b => {
     b.innerHTML = muted ? SND_OFF : SND_ON;

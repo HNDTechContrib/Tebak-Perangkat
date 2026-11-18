@@ -27,8 +27,47 @@ if ($cmd === 'make:migration') {
     exit("Dibuat: database/migrations/" . basename($file) . "\n");
 }
 
+if ($cmd === 'import:excel' || $cmd === 'import:soal') {
+    $file = $argv[2] ?? '';
+    if ($file === '' || !is_file($file)) {
+        exit("Contoh penggunaan:\n  php artisan import:excel <file.xlsx|file.csv> [--replace]\n");
+    }
+    $mode = in_array('--replace', $argv, true) ? 'replace' : 'upsert';
+    echo "Mengimpor $file (mode: $mode)...\n";
+    try {
+        $res = \App\Services\QuestionImporter::importFile($file, $mode);
+        echo "BERHASIL!\n";
+        echo "  Perangkat baru       : {$res['devices_imported']}\n";
+        echo "  Perangkat diperbarui : {$res['devices_updated']}\n";
+        echo "  Singkatan baru       : {$res['abbr_imported']}\n";
+        echo "  Singkatan diperbarui : {$res['abbr_updated']}\n";
+        echo "  Total perangkat aktif: {$res['total_devices']}\n";
+        echo "  Total singkatan aktif: {$res['total_abbr']}\n";
+        if (!empty($res['errors'])) {
+            echo "\nPeringatan/baris dilewati (" . count($res['errors']) . "):\n";
+            foreach (array_slice($res['errors'], 0, 10) as $err) echo "  - $err\n";
+            if (count($res['errors']) > 10) echo "  ... dan " . (count($res['errors']) - 10) . " lainnya.\n";
+        }
+    } catch (Throwable $e) {
+        exit("GAGAL IMPOR: " . $e->getMessage() . "\n");
+    }
+    exit(0);
+}
+
+if ($cmd === 'export:template') {
+    $out = $argv[2] ?? 'template_soal_tebak_perangkat.xlsx';
+    \App\Services\TemplateGenerator::createTemplate($out);
+    exit("Template Excel berhasil dibuat: $out\n");
+}
+
+if ($cmd === 'export:soal') {
+    $out = $argv[2] ?? 'soal_tebak_perangkat.xlsx';
+    \App\Services\TemplateGenerator::exportCurrentQuestions($out);
+    exit("Bank soal berhasil diekspor ke: $out\n");
+}
+
 if (!in_array($cmd, ['migrate', 'migrate:status', 'migrate:rollback', 'migrate:fresh'], true)) {
-    exit("Perintah yang tersedia:\n  migrate\n  migrate:status\n  migrate:rollback\n  migrate:fresh --force\n  make:migration <nama>\n");
+    exit("Perintah yang tersedia:\n  migrate\n  migrate:status\n  migrate:rollback\n  migrate:fresh --force\n  make:migration <nama>\n  import:excel <file> [--replace]\n  export:template [file.xlsx]\n  export:soal [file.xlsx]\n");
 }
 
 // Migrasi butuh hak membuat tabel: pakai DB_MIGRATE_USER kalau diisi, kalau tidak pakai DB_USER

@@ -22,8 +22,14 @@ export function stopTimer() { clearInterval(tick); }
 
 function drawTimer() {
   const g = state.game; if (!g) return;
-  $("timer").style.width = (g.t / g.M.time) * 100 + "%";
-  $("timer").classList.toggle("low", g.t <= g.M.time * 0.25);
+  const left = g.t / g.M.time, secs = Math.ceil(g.t);   // sisa waktu 1..0 dan dalam detik
+  $("timer").style.width = left * 100 + "%";
+  $("timerNum").textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
+  // warna: hijau di atas 50%, kuning 50–25%, merah 25% ke bawah (bar dan angka)
+  for (const el of [$("timer"), $("timerNum")]) {
+    el.classList.toggle("mid", left <= 0.5 && left > 0.25);
+    el.classList.toggle("low", left <= 0.25);
+  }
   $("timerWrap").setAttribute("aria-valuenow", String(Math.ceil(g.t)));
   $("timerWrap").setAttribute("aria-valuetext", `${Math.ceil(g.t)} detik`);
 }
